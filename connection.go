@@ -125,3 +125,53 @@ func ConnHandler(c net.Conn, cfg *MysqlConfig) []byte{
 	}
 	return buf2[0:n]
 }
+func (mc *mConnect) getSystemVar(cmd string) {
+	//构造包结构
+	packlen := len(cmd) + 1
+	buf := make([]byte, packlen+4)
+
+	buf[4] = comQuery
+	copy(buf[5:], cmd)
+
+	buf[0] = byte(packlen)
+	buf[1] = byte(packlen >> 8)
+	buf[2] = byte(packlen >> 16)
+	buf[3] = 0
+
+	n, err := mc.con.Write(buf)
+	if err == nil && n == 4+packlen {
+		fmt.Println("send success")
+	}
+
+	buf = make([]byte, 4096)
+	n, err = mc.con.Read(buf)
+	fmt.Println("read", buf[:n])
+	fmt.Println("readstring", string(buf[:n]))
+
+	//package column count
+	//https://dev.mysql.com/doc/internals/en/packet-OK_Packet.html 解析ok包
+	affectedRows, _, n := readLengthEncodedInteger(buf[4:])
+
+
+	fmt.Println("affectedRows:",affectedRows)
+	pos := 4 + 1
+	//忽略 column def package
+	pos += 4 + int(buf[pos])
+	//string<EOF> https://dev.mysql.com/doc/internals/en/string.html#packet-Protocol::RestOfPacketString
+	//忽略 column def EOF package
+	pos += 4 + int(buf[pos])
+	//query packages
+	// https://dev.mysql.com/doc/internals/en/com-query-response.html#packet-ProtocolText::Resultset
+
+	fmt.Println(string(buf[pos+5:pos+5+int(buf[pos+4])]))
+
+
+	if err == nil && n > 0 && buf[4] == 0x00 {
+		fmt.Println("read success")
+	}
+
+}
+
+func (mc *mConnect) readPackage() ([]byte, error) {
+	return []byte{}, nil
+}

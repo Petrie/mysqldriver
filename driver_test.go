@@ -6,13 +6,17 @@ import (
 )
 
 func TestOpen(t *testing.T) {
-	testByte := []byte {7,0,0,2,0,0,0,2,0,0,0}
+	testByte := []byte {7,0,0,2,0,0,0,2,0,0,0} //mysql handshake `Ok packet`
 	res := mysqldriver.Open()
 
 	if (string(testByte) == string(res)){
-		t.Log("初始化成功")
+		t.Log("连接成功")
 	}else{
 		t.Error("连接失败")
 	}
 
+}
+
+func TestGetSystemVar(t *testing.T){
+	mysqldriver.GetSystemVar()
 }

@@ -1,5 +1,8 @@
 package mysqldriver
 
+const  (
+	maxPacketSize           = 1<<24 - 1
+)
 // https://dev.mysql.com/doc/internals/en/capability-flags.html#packet-Protocol::CapabilityFlags
 type clientFlag uint32
 
@@ -29,4 +32,36 @@ const (
 	clientCanHandleExpiredPasswords
 	clientSessionTrack
 	clientDeprecateEOF
+)
+
+
+const (
+	comQuit byte = iota + 1
+	comInitDB
+	comQuery
+	comFieldList
+	comCreateDB
+	comDropDB
+	comRefresh
+	comShutdown
+	comStatistics
+	comProcessInfo
+	comConnect
+	comProcessKill
+	comDebug
+	comPing
+	comTime
+	comDelayedInsert
+	comChangeUser
+	comBinlogDump
+	comTableDump
+	comConnectOut
+	comRegisterSlave
+	comStmtPrepare
+	comStmtExecute
+	comStmtSendLongData
+	comStmtClose
+	comStmtReset
+	comSetOption
+	comStmtFetch
 )
