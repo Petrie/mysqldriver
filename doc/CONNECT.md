@@ -1,10 +1,8 @@
-# 如何用golang实现mysql驱动程序
-
-### 建立连接
+## 建立连接
 
 源码分支：v1-connect [点击跳转](https://github.com/Petrie/mysqldriver/tree/v1-connect)
 
-#### 建立连接的步骤
+### 建立连接的步骤
 
 mysql驱动与服务器建立连接的步骤可以查阅官方文档
 
@@ -23,7 +21,7 @@ mysql驱动与服务器建立连接的步骤可以查阅官方文档
 
 本节将使用golang实现这四部分的代码。
 
-#### 如何验证连接是否成功建立？
+### 如何验证连接是否成功建立？
 
 1. 通过命令 `show processlist`
 
