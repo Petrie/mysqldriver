@@ -40,8 +40,8 @@ func Open () []byte {
 
 func GetSystemVar(){
 	connect()
+	defer close()
 	ConnHandler(mc.con, mc.cfg)
-	//time.Sleep(5*time.Second)
 	mc.getSystemVar("SELECT @@version")
 	mc.getSystemVar("SELECT @@max_allowed_packet")
 

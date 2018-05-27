@@ -145,15 +145,12 @@ func (mc *mConnect) getSystemVar(cmd string) {
 
 	buf = make([]byte, 4096)
 	n, err = mc.con.Read(buf)
-	fmt.Println("read", buf[:n])
-	fmt.Println("readstring", string(buf[:n]))
 
 	//package column count
 	//https://dev.mysql.com/doc/internals/en/packet-OK_Packet.html 解析ok包
-	affectedRows, _, n := readLengthEncodedInteger(buf[4:])
+	columncount, _, n := readLengthEncodedInteger(buf[4:])
 
-
-	fmt.Println("affectedRows:",affectedRows)
+	fmt.Println("columncount:",columncount)
 	pos := 4 + 1
 	//忽略 column def package
 	pos += 4 + int(buf[pos])
@@ -165,10 +162,6 @@ func (mc *mConnect) getSystemVar(cmd string) {
 
 	fmt.Println(string(buf[pos+5:pos+5+int(buf[pos+4])]))
 
-
-	if err == nil && n > 0 && buf[4] == 0x00 {
-		fmt.Println("read success")
-	}
 
 }
 
