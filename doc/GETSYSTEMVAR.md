@@ -3,6 +3,11 @@
 
 [源码入口](https://github.com/Petrie/mysqldriver/blob/v2-getsystemvar/driver.go#L41)
 
+###单元测试
+```shell
+go test -v -test.run TestGetSystemVar
+```
+
 ### 构造查询请求
 
 > https://dev.mysql.com/doc/internals/en/com-query.html
