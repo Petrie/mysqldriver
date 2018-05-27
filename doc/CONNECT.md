@@ -1,6 +1,8 @@
 ## 建立连接
 
-源码分支：v1-connect [点击跳转](https://github.com/Petrie/mysqldriver/tree/v1-connect)
+### 源码地址
+
+[源码入口](https://github.com/Petrie/mysqldriver/blob/v1-connect/driver.go#L11)
 
 ### 建立连接的步骤
 

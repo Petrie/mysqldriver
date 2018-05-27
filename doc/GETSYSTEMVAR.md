@@ -1,7 +1,7 @@
 ## 获取系统变量
 ### 源码地址
 
-
+[源码入口](https://github.com/Petrie/mysqldriver/blob/v2-getsystemvar/driver.go#L41)
 
 ### 构造查询请求
 
