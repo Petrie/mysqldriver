@@ -20,3 +20,7 @@ func TestOpen(t *testing.T) {
 func TestGetSystemVar(t *testing.T){
 	mysqldriver.GetSystemVar()
 }
+
+func TestNewGetSystemVar(t *testing.T){
+	mysqldriver.NewGetSystemVar()
+}

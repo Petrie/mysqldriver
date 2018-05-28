@@ -9,12 +9,24 @@ import (
 type mConnect struct {
 	con net.Conn
 	cfg *MysqlConfig
+	readData []byte
+	readDataIndex int
+	readDataLength int
+	writeData []byte
+	sequence int
 }
+
+
+
 
 var mc *mConnect
 
 func connect() {
-	mc = &mConnect{}
+	mc = &mConnect{
+		readData:make([]byte, 4096),
+		writeData:make([]byte, 4096),
+	}
+
 	mc.cfg = &MysqlConfig{
 		User:   "root",
 		Passwd: "123123",
@@ -45,6 +57,14 @@ func GetSystemVar(){
 	mc.getSystemVar("SELECT @@version")
 	mc.getSystemVar("SELECT @@max_allowed_packet")
 
+}
+
+func NewGetSystemVar(){
+	connect()
+	defer close()
+	ConnHandler(mc.con, mc.cfg)
+	mc.newGetSystemVar("SELECT @@version")
+	mc.newGetSystemVar("SELECT @@max_allowed_packet")
 }
 
 func close(){

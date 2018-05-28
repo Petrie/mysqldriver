@@ -5,6 +5,7 @@ import (
 	"net"
 	"bytes"
 	"encoding/binary"
+	"log"
 )
 
 
@@ -165,6 +166,41 @@ func (mc *mConnect) getSystemVar(cmd string) {
 
 }
 
-func (mc *mConnect) readPackage() ([]byte, error) {
-	return []byte{}, nil
+func (mc *mConnect) newGetSystemVar(cmd string){
+	//构造包结构
+	packlen := len(cmd) + 1
+	buf := make([]byte, packlen+4)
+
+	buf[4] = comQuery
+	copy(buf[5:], cmd)
+
+	buf[0] = byte(packlen)
+	buf[1] = byte(packlen >> 8)
+	buf[2] = byte(packlen >> 16)
+	buf[3] = 0
+
+	n, err := mc.con.Write(buf)
+	if err == nil && n == 4+packlen {
+		log.Println("send success")
+	}
+	data, err := mc.readPacket()
+	//package column count
+	//https://dev.mysql.com/doc/internals/en/packet-OK_Packet.html 解析ok包
+	columncount, _, n := readLengthEncodedInteger(data)
+
+	log.Println("columncount:",columncount)
+//	pos := 4 + 1
+	//忽略 column def package
+	mc.readPacket()
+//	pos += 4 + int(buf[pos])
+	//string<EOF> https://dev.mysql.com/doc/internals/en/string.html#packet-Protocol::RestOfPacketString
+	//忽略 column def EOF package
+	mc.readPacket()
+//	pos += 4 + int(buf[pos])
+	//query packages
+	// https://dev.mysql.com/doc/internals/en/com-query-response.html#packet-ProtocolText::Resultset
+	data, err = mc.readPacket()
+	fmt.Println(string(data[1:1+int(data[0])]))
+	mc.readPacket()
+
 }
