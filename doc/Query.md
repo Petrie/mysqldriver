@@ -3,7 +3,8 @@
 > https://dev.mysql.com/doc/internals/en/packet-ERR_Packet.html
 > https://dev.mysql.com/doc/internals/en/com-query-response.html
 ### 源码地址
-> https://github.com/Petrie/mysqldriver/blob/master/connection.go#L208
+> https://github.com/Petrie/mysqldriver/blob/v4-query/connection.go#L208
+
 ### 单元测试
 > go test -v -test.run NewGetSystemVar
 
