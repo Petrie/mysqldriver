@@ -204,3 +204,47 @@ func (mc *mConnect) newGetSystemVar(cmd string){
 	mc.readPacket()
 
 }
+
+func (mc *mConnect) query(sql string){
+	//构造请求包结构
+	packlen := len(sql) + 1
+	buf := make([]byte, packlen+4)
+
+	buf[4] = comQuery
+	copy(buf[5:], sql)
+
+	buf[0] = byte(packlen)
+	buf[1] = byte(packlen >> 8)
+	buf[2] = byte(packlen >> 16)
+	buf[3] = 0
+	n, err := mc.con.Write(buf)
+
+	if err == nil && n == 4+packlen {
+		log.Println("send success")
+	}
+	columns, _ := mc.readColumn()
+	if(true){
+		fmt.Println(columns)
+	}
+	val := make([]string, len(columns))
+	mc.readRow(val)
+
+	for i := range val{
+		input := val[i]
+			fmt.Println(input)
+	}
+
+	mc.readRow(val)
+
+	for i := range val{
+		input := val[i]
+		fmt.Println(input)
+	}
+
+	mc.readRow(val)
+
+	for i := range val{
+		input := val[i]
+		fmt.Println(input)
+	}
+}

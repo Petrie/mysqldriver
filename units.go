@@ -1,6 +1,9 @@
 package mysqldriver
 
-import "crypto/sha1"
+import (
+	"crypto/sha1"
+	"io"
+)
 
 func scramblePassword(scramble, password []byte) []byte {
 	if len(password) == 0 {
@@ -63,3 +66,36 @@ func readLengthEncodedInteger(b []byte) (uint64, bool, int) {
 	// 0-250: value of first byte
 	return uint64(b[0]), false, 1
 }
+
+func skipLengthEncodedString(b []byte) (int, error) {
+	// Get length
+	num, _, n := readLengthEncodedInteger(b)
+	if num < 1 {
+		return n, nil
+	}
+
+	n += int(num)
+
+	// Check data length
+	if len(b) >= n {
+		return n, nil
+	}
+	return n, io.EOF
+}
+
+func readLengthEncodedString(b []byte) ([]byte, bool, int, error) {
+	// Get length
+	num, isNull, n := readLengthEncodedInteger(b)
+	if num < 1 {
+		return b[n:n], isNull, n, nil
+	}
+
+	n += int(num)
+
+	// Check data length
+	if len(b) >= n {
+		return b[n-int(num) : n : n], false, n, nil
+	}
+	return nil, false, n, io.EOF
+}
+
